@@ -89,6 +89,10 @@ input[type="submit"] {
     cursor: pointer;
 }
 
+input[type="submit"]:hover {
+    background-color: rgb(124, 13, 115)
+}
+
 #agreement, #agreement-label {
     display: inline-block;
     width: auto;
