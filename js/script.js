@@ -1,10 +1,19 @@
 class Validator {
   constructor() {
-    this.validations = ["data-min-length"];
+    this.validations = [
+      "data-min-length",
+      "data-max-length",
+    ];
   }
 
   validate(form) {
     let inputs = form.getElementsByTagName("input");
+
+    let currentValidations = document.querySelectorAll("form .error-validations")
+
+    if(currentValidations.length > 0) {
+      this.cleanValidations(currentValidations)
+    }
 
     let inputsArray = [...inputs];
     inputsArray.forEach(function (input) {
@@ -21,6 +30,7 @@ class Validator {
       }
     }, this);
   }
+
   minlength(input, minValue) {
     let inputLength = input.value.length;
     let errorMessage = `O campo precisa de pelo menos ${minValue} caracteres`;
@@ -30,8 +40,17 @@ class Validator {
     }
   }
 
+  maxlength(input , maxValue) {
+    let inputLength = input.value.length;
+    let errorMessage = `O campo precisa ter menos que ${maxValue} caracteres`;
+
+    if (inputLength > maxValue) {
+      this.printMessage(input, errorMessage);
+    }
+  }
+
   printMessage(input, msg) {
-    let template = document.querySelector('.erro-validation').cloneNode(true);
+    let template = document.querySelector('.error-validation').cloneNode(true);
 
     template.textContent = msg;
 
@@ -41,6 +60,9 @@ class Validator {
 
     inputParent.appendChild(template);
   }
+  cleanValidations(validations) {
+    validations.forEach(el => el.remove());
+  }
 }
 
 let form = document.getElementById("register-form");
@@ -48,7 +70,7 @@ let submit = document.getElementById("btn-submit");
 
 let validator = new Validator();
 
-submit.addEventListener("click", function (e) {
+submit.addEventListener("click", function(e) {
   e.preventDefault();
   validator.validate(form);
 });
